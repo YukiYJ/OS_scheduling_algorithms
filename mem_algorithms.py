@@ -61,6 +61,10 @@ def segment_init():
 	global segments
 	global holes
 	global jobs
+	jobs = []
+	holes = []
+	segments = []
+
 	total = 8192
 
 	segments.append(Segment(0,2432,304))
@@ -176,12 +180,31 @@ def worst_fit(holes,jobs):
 		if (fit_flag == False):
 			rejected.append(jobs[i])
 
+def print_hole_info():
+	for i in range(len(holes)):
+		print("Hole #" + str(holes[i].id) + " Base: " + str(holes[i].base) + " Size: " + str(holes[i].size))
+
 if __name__ == '__main__':
+	# For question 3
+	print("First:")
 	segment_init()
-
 	first_fit(holes,jobs)
-
 	print_result()
+	print_hole_info()
+	print("====================================================")
+	print("Best:")
+	segment_init()
+	best_fit(holes,jobs)
+	print_result()
+	print_hole_info()
+	print("====================================================")
+	print("Worst:")
+	segment_init()
+	worst_fit(holes,jobs)
+	print_result()
+	print_hole_info()
+	print("====================================================")
+	
 
 	# For question 2:
 	"""
