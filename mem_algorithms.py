@@ -7,6 +7,7 @@ rejected = []
 total = 0
 jobs = []
 holes = []
+segments = []
 
 def init():
 	global total
@@ -15,7 +16,6 @@ def init():
 	arrival_queue = []
 	global rejected
 	rejected = []
-	"""
 	holes.append(Hole(1,321))
 	holes.append(Hole(2,222))
 	holes.append(Hole(3,123))
@@ -32,6 +32,7 @@ def init():
 	arrival_queue.append(Job(10,72))
 	arrival_queue.append(Job(11,19))
 	arrival_queue.append(Job(12,50))
+	
 	"""
 	# For testing:
 	holes.append(Hole(1,200))
@@ -45,8 +46,45 @@ def init():
 	arrival_queue.append(Job(4,400))
 	arrival_queue.append(Job(5,120))
 	arrival_queue.append(Job(6,160))
-	
+	"""
+
 	return holes,arrival_queue
+
+def segment_compare(a,b):
+	if a.base <= b.base:
+		return -1
+	elif a.base > b.base:
+		return 1
+
+def segment_init():
+	global total
+	global segments
+	global holes
+	global jobs
+	total = 8192
+
+	segments.append(Segment(0,2432,304))
+	segments.append(Segment(1,1111,456))
+	segments.append(Segment(2,4334,987))
+	segments.append(Segment(3,5678,321))
+	segments.append(Segment(4,3901,135))
+	segments.append(Segment(5,3011,345))
+	segments.append(Segment(6,0,1111)) # OS reserved
+	segments.append(Segment(7,6789,1403)) # OS reserved
+	segments = sorted(segments,key = compare_wrapper(segment_compare))
+
+	for i in range(len(segments) - 1):
+		holes.append(Hole(i,segments[i+1].base - (segments[i].base + segments[i].limit)))
+		holes[i].base = segments[i].base + segments[i].limit
+
+	jobs.append(Job(0,212))
+	jobs.append(Job(1,388))
+	jobs.append(Job(2,93))
+	# jobs.append(Job(3,987)) # Omit the shared segment
+	jobs.append(Job(4,281))
+	jobs.append(Job(5,456))
+	jobs.append(Job(6,99))
+
 
 def remaining_space_compare(a,b):
 	if a.rem_space < b.rem_space:
@@ -83,7 +121,7 @@ def print_result():
 	used = 0
 	for i in range(len(holes)):
 		used += holes[i].size - holes[i].rem_space
-		print("Hole #" + str(holes[i].id) + ": " + str(holes[i].rem_space) + "/" + str(holes[i].size))
+		print("Hole #" + str(holes[i].id) + ": " + str(holes[i].rem_space) + "/" + str(holes[i].size) + " remaining")
 		for job in holes[i].jobs:
 			print(str(job.id) + " ",end="")
 		print()
@@ -93,6 +131,10 @@ def print_result():
 	print()
 	used += total - sum(h.size for h in holes)
 	print("Used: " + str(used) + "  Total: " + str(total) + "  " + str(round(100. * used / total,1)) + "%")
+
+def print_jobs():
+	for i in range(len(jobs)):
+		print("#" + str(jobs[i].id) + " size: " + str(jobs[i].size))
 
 def first_fit(holes,jobs):
 	for i in range(len(jobs)):
@@ -135,7 +177,16 @@ def worst_fit(holes,jobs):
 			rejected.append(jobs[i])
 
 if __name__ == '__main__':
+	segment_init()
+
+	first_fit(holes,jobs)
+
+	print_result()
+
+	# For question 2:
+	"""
 	holes, jobs = init()
+	print_jobs()
 	print("First:")
 	first_fit(holes,jobs)
 	print_result()
@@ -149,3 +200,6 @@ if __name__ == '__main__':
 	print("Worst:")
 	worst_fit(holes,jobs)
 	print_result()
+	"""
+	# Optimal:
+	# 57 excess cannot be satisfied, is it possible to leave out just the size 59 job?
