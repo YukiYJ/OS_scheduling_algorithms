@@ -4,15 +4,18 @@ from hole import *
 from asyncio import Queue
 
 rejected = []
-
+total = 0
+jobs = []
+holes = []
 
 def init():
-	
+	global total
+	total = 5000
 	holes = []
 	arrival_queue = []
 	global rejected
 	rejected = []
-
+	"""
 	holes.append(Hole(1,321))
 	holes.append(Hole(2,222))
 	holes.append(Hole(3,123))
@@ -29,7 +32,20 @@ def init():
 	arrival_queue.append(Job(10,72))
 	arrival_queue.append(Job(11,19))
 	arrival_queue.append(Job(12,50))
+	"""
+	# For testing:
+	holes.append(Hole(1,200))
+	holes.append(Hole(2,400))
+	holes.append(Hole(3,600))
+	holes.append(Hole(4,300))
 
+	arrival_queue.append(Job(1,280))
+	arrival_queue.append(Job(2,180))
+	arrival_queue.append(Job(3,320))
+	arrival_queue.append(Job(4,400))
+	arrival_queue.append(Job(5,120))
+	arrival_queue.append(Job(6,160))
+	
 	return holes,arrival_queue
 
 def remaining_space_compare(a,b):
@@ -63,20 +79,19 @@ def compare_wrapper(mycmp):
     return K
 
 def print_result():
-	total = 0
+	global total
 	used = 0
-
 	for i in range(len(holes)):
 		used += holes[i].size - holes[i].rem_space
-		total += holes[i].size
 		print("Hole #" + str(holes[i].id) + ": " + str(holes[i].rem_space) + "/" + str(holes[i].size))
 		for job in holes[i].jobs:
 			print(str(job.id) + " ",end="")
 		print()
-		print("Rejected:")
+	print("Rejected:")
 	for job in rejected:
 		print(str(job.id) + " ",end="")
 	print()
+	used += total - sum(h.size for h in holes)
 	print("Used: " + str(used) + "  Total: " + str(total) + "  " + str(round(100. * used / total,1)) + "%")
 
 def first_fit(holes,jobs):
@@ -120,17 +135,17 @@ def worst_fit(holes,jobs):
 			rejected.append(jobs[i])
 
 if __name__ == '__main__':
-	holes, arrival_queue = init()
+	holes, jobs = init()
 	print("First:")
-	first_fit(holes,arrival_queue)
+	first_fit(holes,jobs)
 	print_result()
 	print("====================================================")
 	holes, arrival_queue = init()
 	print("Best:")
-	best_fit(holes,arrival_queue)
+	best_fit(holes,jobs)
 	print_result()
 	print("====================================================")
 	holes, arrival_queue = init()
 	print("Worst:")
-	worst_fit(holes,arrival_queue)
+	worst_fit(holes,jobs)
 	print_result()
