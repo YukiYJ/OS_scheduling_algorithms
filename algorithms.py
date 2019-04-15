@@ -113,7 +113,8 @@ def priority_with_premption(arrival_queue,option):
 	return schedule
 
 
-def print_result():
+def print_result(arrival_queue):
+	decision_count = 0
 	print("Total time: " + str(len(schedule)))
 	for i in range(len(schedule)):
 		if (schedule[i] == -1):
@@ -126,11 +127,50 @@ def print_result():
 	for i in range(len(schedule)-1):
 		if (schedule[i+1] != schedule[i]):
 			print("^",end="")
+			decision_count += 1
 		else:
 			print(" ",end="")
 		if (i+1) % 5 == 0:
 			print(" ",end="")
+	print(" " + str(decision_count) + " decisions")
 	print()
+
+	wait_list = []
+	tr_list = []
+	resp_list = []
+
+	print("Pid\tBurst\tArr\tPrior\tWait\tTR\tResp")
+	for i in range(len(arrival_queue)):
+		event = arrival_queue[i]
+		last = len(schedule) - 1
+		while(True):
+			if schedule[last] == event.id:
+				break
+			last -= 1
+		tr = last - event.arrival_t + 1
+		wait = tr - event._duration_
+
+		progress = 0
+		index = 0
+		while (progress < event._duration_ / 2.):
+			if (schedule[index] == event.id):
+				progress += 1
+			index += 1
+		if (event._duration_ % 2 != 0):
+			resp = index - 0.5
+		else:
+			resp = index
+		resp = resp - event.arrival_t
+
+		wait_list.append(wait)
+		tr_list.append(tr)
+		resp_list.append(resp)
+
+		print(str(arrival_queue[i].id)+"\t"+str(arrival_queue[i]._duration_)+"\t"+str(arrival_queue[i].arrival_t),end="")
+		print("\t"+str(arrival_queue[i].priority)+"\t"+str(wait)+"\t"+str(tr)+"\t"+str(resp))
+	print("Avg." + "\t\t\t\t" + str(sum(wait_list)/len(wait_list)) + "\t" + str(sum(tr_list)/len(tr_list)) + "\t" + str(sum(resp_list)/len(resp_list)))
+
+
 
 # This implementation assumes the newly arrived task
 # comes before the finishing task
@@ -168,5 +208,5 @@ def RR(arrival_queue,q): # q stands for quantum
 if __name__ == '__main__':
 	arrival_queue = init()
 	RR(arrival_queue,3)
-	print_result()
+	print_result(arrival_queue)
 
