@@ -18,6 +18,7 @@ def FIFO():
 			fault_count += 1
 			page_table.pop(0)
 			page_table.append(access_sequence[i])
+	print("Page faults: " + str(fault_count))
 
 def LRU():
 	global fault_count
@@ -32,8 +33,9 @@ def LRU():
 			fault_count += 1
 			page_table.pop(-1)
 			page_table = [access_sequence[i]] + page_table
+	print("Page faults: " + str(fault_count))
 
 
 if __name__ == '__main__':
-	LRU()
-	#FIFO()
+	# LRU()
+	FIFO()
