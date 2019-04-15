@@ -16,12 +16,18 @@ def init():
 	arrival_queue.append(Event(5,10,10,4))
 	"""
 	# For testing:
-	
+	"""
 	arrival_queue.append(Event(1,8,0,5))
 	arrival_queue.append(Event(2,5,1,7))
 	arrival_queue.append(Event(3,3,2,2))
 	arrival_queue.append(Event(4,1,3,8))
 	arrival_queue.append(Event(5,7,4,4))
+	"""
+	arrival_queue.append(Event(1,9,0,4))
+	arrival_queue.append(Event(2,5,1,7))
+	arrival_queue.append(Event(3,2,2,2))
+	arrival_queue.append(Event(4,3,3,7))
+	arrival_queue.append(Event(5,6,4,4))
 	arrival_queue.sort(key = lambda x: x.arrival_t)
 	return arrival_queue
 
@@ -110,7 +116,10 @@ def priority_with_premption(arrival_queue,option):
 def print_result():
 	print("Total time: " + str(len(schedule)))
 	for i in range(len(schedule)):
-		print(schedule[i],end="")
+		if (schedule[i] == -1):
+			print("_",end="")
+		else:
+			print(schedule[i],end="")
 		if (i+1) % 5 == 0:
 			print(" ",end="")
 	print()
@@ -123,10 +132,41 @@ def print_result():
 			print(" ",end="")
 	print()
 
+# This implementation assumes the newly arrived task
+# comes before the finishing task
+def RR(arrival_queue,q): # q stands for quantum
+	current_t = 0
+	arrival_queue_head = 0
+	run_queue = []
+
+	already_run = 0
+	while (True):
+		if arrival_queue_head == len(arrival_queue) and len(run_queue) == 0:
+			break
+		if arrival_queue_head < len(arrival_queue) and current_t >= arrival_queue[arrival_queue_head].arrival_t:
+			run_queue.append(arrival_queue[arrival_queue_head])
+			arrival_queue_head+=1
+		current_t+=1
+		if (len(run_queue) == 0):
+			schedule.append(-1)
+		else:
+			if (already_run < q):
+				schedule.append(run_queue[0].id)
+				run_queue[0].burst_t -= 1
+				already_run += 1
+				if (run_queue[0].burst_t == 0):
+					already_run = 0
+					run_queue.pop(0)
+					continue
+				if (already_run == q):
+					already_run = 0
+					run_queue.append(run_queue.pop(0))
+				
+	return schedule
 
 
 if __name__ == '__main__':
 	arrival_queue = init()
-	priority_with_premption(arrival_queue,"linux")
+	RR(arrival_queue,3)
 	print_result()
 
