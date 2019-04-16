@@ -1,11 +1,7 @@
 #!/usr/local/bin/python3
 
 
-def knapsack_f():
-	x = 17
-	y = 25
-	z = 43
-	s = 233
+def knapsack_f(x,y,z,s):
 	all_results = []
 	for i in range(10):
 		for j in range(10):
@@ -14,13 +10,9 @@ def knapsack_f():
 				if (total <= s):
 					all_results.append([i,j,k,total])
 	all_results.sort(key = lambda x: x[3], reverse = True)
-	print(all_results)
+	return all_results
 
-def knapsack_g():
-	x = 17
-	y = 25
-	z = 43
-	s = 233
+def knapsack_g(x,y,z,s):
 	all_results = []
 	for i in range(int(s/x) + 1):
 		for j in range(int(s/y) + 1):
@@ -29,13 +21,9 @@ def knapsack_g():
 				if (total <= s):
 					all_results.append([i,j,k,total])
 	all_results.sort(key = lambda x: x[3], reverse = True)
-	print(all_results)
+	return all_results
 
-def knapsack_h():
-	x = 17
-	y = 25
-	z = 43
-	s = 233
+def knapsack_h(x,y,z,s):
 	all_results = []
 	for i in range(1,10):
 		for j in range(1,10):
@@ -44,9 +32,21 @@ def knapsack_h():
 				if (total <= s):
 					all_results.append([i,j,k,total])
 	all_results.sort(key = lambda x: x[3], reverse = True)
-	print(all_results)	
+	return all_results
 
 
 
 if __name__ == '__main__':
-	knapsack_h()
+	print(knapsack_f(17,25,43,233)[0])
+	print(knapsack_f(31,41,52,666)[0])
+	print(knapsack_f(27,42,51,899)[0])
+	print()
+	print(knapsack_g(17,25,43,233)[0])
+	print(knapsack_g(31,41,52,666)[0])
+	print(knapsack_g(27,42,51,899)[0])
+	print()
+	print(knapsack_h(17,25,43,233)[0])
+	print(knapsack_h(31,41,52,666)[0])
+	print(knapsack_h(27,42,51,899)[0])
+
+
