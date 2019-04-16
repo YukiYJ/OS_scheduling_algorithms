@@ -11,7 +11,7 @@ segments = []
 
 def init():
 	global total
-	total = 5000
+	total = 1000
 	holes = []
 	arrival_queue = []
 	global rejected
@@ -28,7 +28,7 @@ def init():
 	arrival_queue.append(Job(6,21))
 	arrival_queue.append(Job(7,99))
 	arrival_queue.append(Job(8,59))
-	arrival_queue.append(Job(9,80))
+	arrival_queue.append(Job(9,81))
 	arrival_queue.append(Job(10,72))
 	arrival_queue.append(Job(11,19))
 	arrival_queue.append(Job(12,50))
@@ -125,16 +125,16 @@ def print_result():
 	used = 0
 	for i in range(len(holes)):
 		used += holes[i].size - holes[i].rem_space
-		print("Hole #" + str(holes[i].id) + ": " + str(holes[i].rem_space) + "/" + str(holes[i].size) + " remaining")
+		print("Hole \\#" + str(holes[i].id) + ": " ,end="",)
 		for job in holes[i].jobs:
 			print(str(job.id) + " ",end="")
-		print()
-	print("Rejected:")
+		print( "("+ str(holes[i].rem_space) + " out of " + str(holes[i].size) + " remaining) \\\\")
+	print("Rejected: ",end="")
 	for job in rejected:
 		print(str(job.id) + " ",end="")
-	print()
+	print("\\\\")
 	used += total - sum(h.size for h in holes)
-	print("Used: " + str(used) + "  Total: " + str(total) + "  " + str(round(100. * used / total,1)) + "%")
+	print("Used: " + str(used) + "  Total: " + str(total) + "  " + str(round(100. * used / total,1)) + "\\%\\\\")
 
 def print_jobs():
 	for i in range(len(jobs)):
@@ -204,10 +204,8 @@ if __name__ == '__main__':
 	print_result()
 	print_hole_info()
 	print("====================================================")
-	
-
-	# For question 2:
 	"""
+	# For question 2:
 	holes, jobs = init()
 	print_jobs()
 	print("First:")

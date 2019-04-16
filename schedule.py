@@ -6,15 +6,14 @@ from asyncio import Queue
 schedule = []
 
 def init():
-	
+	global schedule
 	arrival_queue = []
-	"""
+	schedule = []
 	arrival_queue.append(Event(1,10,0,3))
 	arrival_queue.append(Event(2,8,1,1))
 	arrival_queue.append(Event(3,4,3,6))
 	arrival_queue.append(Event(4,8,6,8))
 	arrival_queue.append(Event(5,10,10,4))
-	"""
 	# For testing:
 	"""
 	arrival_queue.append(Event(1,8,0,5))
@@ -23,12 +22,13 @@ def init():
 	arrival_queue.append(Event(4,1,3,8))
 	arrival_queue.append(Event(5,7,4,4))
 	"""
-
+	"""
 	arrival_queue.append(Event(1,9,0,4))
 	arrival_queue.append(Event(2,5,1,7))
 	arrival_queue.append(Event(3,2,2,2))
 	arrival_queue.append(Event(4,3,3,7))
 	arrival_queue.append(Event(5,6,4,4))
+	"""
 	arrival_queue.sort(key = lambda x: x.arrival_t)
 	return arrival_queue
 
@@ -124,6 +124,7 @@ def print_result(arrival_queue):
 # This implementation assumes the newly arrived task
 # comes before the finishing task
 def RR(arrival_queue,q): # q stands for quantum
+	print("RR" + str(q))
 	current_t = 0
 	arrival_queue_head = 0
 	run_queue = []
@@ -154,6 +155,7 @@ def RR(arrival_queue,q): # q stands for quantum
 	return schedule
 
 def SRT(arrival_queue):
+	print("SRT")
 	current_t = 0
 	arrival_queue_head = 0
 	run_queue = []
@@ -176,6 +178,7 @@ def SRT(arrival_queue):
 	return schedule
 
 def priority_with_premption(arrival_queue,option):
+	print("Priority " + str(option))
 	current_t = 0
 	arrival_queue_head = 0
 	run_queue = []
@@ -204,6 +207,23 @@ def priority_with_premption(arrival_queue,option):
 
 if __name__ == '__main__':
 	arrival_queue = init()
+	SRT(arrival_queue)
+	print_result(arrival_queue)
+	print()
+	arrival_queue = init()
+	priority_with_premption(arrival_queue,"linux")
+	print_result(arrival_queue)
+	print()
+	arrival_queue = init()
+	priority_with_premption(arrival_queue,"win")
+	print_result(arrival_queue)
+	print()
+	arrival_queue = init()
 	RR(arrival_queue,3)
 	print_result(arrival_queue)
+	print()
+	arrival_queue = init()
+	RR(arrival_queue,2)
+	print_result(arrival_queue)	
+
 
