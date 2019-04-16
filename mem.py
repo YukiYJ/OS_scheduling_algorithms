@@ -8,6 +8,7 @@ total = 0
 jobs = []
 holes = []
 segments = []
+logical_addresses = [(0,303),(1,384),(2,77),(3,789),(4,123),(5,99),(6,88)]
 
 def init():
 	global total
@@ -101,6 +102,7 @@ def remaining_space_compare(a,b):
 		else:
 			return 1
 
+
 def compare_wrapper(mycmp):
     'Convert a cmp= function into a key= function'
     class K:
@@ -145,6 +147,9 @@ def first_fit(holes,jobs):
 		fit_flag = False
 		for h in holes:
 			if (h.rem_space >= jobs[i].size):
+				temp = jobs[i]
+				# print(str(logical_addresses[temp.id]) + " @" + str(logical_addresses[temp.id][1] + h.base + h.size - h.rem_space))
+				print(str(temp.id) + " & " + str(h.base + h.size - h.rem_space) + " & " + str(temp.size) + "\\\\")
 				h.rem_space -= jobs[i].size
 				h.jobs.append(jobs[i])
 				fit_flag = True
@@ -159,6 +164,9 @@ def best_fit(holes,jobs):
 		fit_flag = False
 		for h in holes:
 			if (h.rem_space >= jobs[i].size):
+				temp = jobs[i]
+				#print(str(logical_addresses[temp.id]) + " @" + str(logical_addresses[temp.id][1] + h.base + h.size - h.rem_space))
+				print(str(temp.id) + " & " + str(h.base + h.size - h.rem_space) + " & " + str(temp.size) + "\\\\")
 				h.rem_space -= jobs[i].size
 				h.jobs.append(jobs[i])
 				fit_flag = True
@@ -173,6 +181,9 @@ def worst_fit(holes,jobs):
 		fit_flag = False
 		for h in holes:
 			if (h.rem_space >= jobs[i].size):
+				temp = jobs[i]
+				#print(str(logical_addresses[temp.id]) + " @" + str(logical_addresses[temp.id][1] + h.base + h.size - h.rem_space))
+				print(str(temp.id) + " & " + str(h.base + h.size - h.rem_space) + " & " + str(temp.size) + "\\\\")
 				h.rem_space -= jobs[i].size
 				h.jobs.append(jobs[i])
 				fit_flag = True
