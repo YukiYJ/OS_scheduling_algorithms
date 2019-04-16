@@ -2,15 +2,14 @@
 
 import numpy as np
 
-n_processes = int(input('Number of processes? '))
-n_resources = int(input('Number of resources? '))
+n_processes = 5
+n_resources = 3
 
-available_resources = [int(x) for x in input('Claim vector? ').split(' ')]
+current_available_resources = [3,3,2]
 
-currently_allocated = np.array([[int(x) for x in input('Currently allocated for process ' + str(i + 1) + '? ').split(' ')] for i in range(n_processes)])
-max_demand = np.array([[int(x) for x in input('Maximum demand from process ' + str(i + 1) + '? ').split(' ')] for i in range(n_processes)])
+currently_allocated = np.array([[0,1,0],[2,0,0],[3,0,2],[2,1,1],[0,0,2]])
+max_demand = np.array([[7,5,3],[3,2,2],[9,0,2],[2,2,2],[4,3,3]])
 
-total_available = available_resources - np.sum(currently_allocated, axis=0)
 
 running = np.ones(n_processes) # An array with n_processes 1's to indicate if process is yet to run
 
@@ -18,11 +17,11 @@ while np.count_nonzero(running) > 0:
 	at_least_one_allocated = False
 	for p in range(n_processes):
 		if running[p]:
-			if all(i >= 0 for i in total_available - (max_demand[p] - currently_allocated[p])):
+			if all(i >= 0 for i in current_available_resources - (max_demand[p] - currently_allocated[p])):
 				at_least_one_allocated = True
 				print(str(p) + ' is running')
 				running[p] = 0
-				total_available += currently_allocated[p]
+				current_available_resources += currently_allocated[p]
 	if not at_least_one_allocated:
 		print('Unsafe')
 		exit()
