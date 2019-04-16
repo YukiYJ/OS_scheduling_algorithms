@@ -10,29 +10,43 @@ def FIFO():
 	global fault_count
 	global page_table
 	fault_count = 0
+	print("#" + str(0) + "\t" + str(page_table))
 	for i in range(len(access_sequence)):
-		print("#" + str(i) + "\t" + str(page_table))
+		fault_flag = False
 		if access_sequence[i] in page_table:
-			continue
-		else:
+			pass
+		else: # fault
+			fault_flag = True
 			fault_count += 1
 			page_table.pop(0)
 			page_table.append(access_sequence[i])
+		print("#" + str(i+1) + "\t" + str(page_table),end="")
+		if fault_flag:
+			print("   <")
+		else:
+			print()
 	print("Page faults: " + str(fault_count))
 
 def LRU():
 	global fault_count
 	global page_table
 	fault_count = 0
+	print("#" + str(0) + "\t" + str(page_table))
 	for i in range(len(access_sequence)):
-		print("#" + str(i) + "\t" + str(page_table))
+		fault_flag = False
 		if access_sequence[i] in page_table:
 			page_table = [page_table.pop(page_table.index(access_sequence[i]))] + page_table
-			continue
-		else:
+		else: # fault
+			fault_flag = True
 			fault_count += 1
 			page_table.pop(-1)
 			page_table = [access_sequence[i]] + page_table
+		print("#" + str(i+1) + "\t" + str(page_table),end="")
+		if fault_flag:
+			print("   <")
+		else:
+			print()
+
 	print("Page faults: " + str(fault_count))
 
 
