@@ -116,7 +116,7 @@ def print_result(arrival_queue):
 		resp_list.append(resp)
 
 		print(str(arrival_queue[i].id)+"\t"+str(arrival_queue[i]._duration_)+"\t"+str(arrival_queue[i].arrival_t),end="")
-		print("\t"+str(arrival_queue[i].priority)+"\t"+str(wait)+"\t"+str(tr)+"\t"+str(resp)+ "\t" + str(float(event._duration_ + 1)/tr))
+		print("\t"+str(arrival_queue[i].priority)+"\t"+str(wait)+"\t"+str(tr)+"\t"+str(resp)+ "\t" + str(round(tr/float(event._duration_ + 1),2)))
 	print("Avg." + "\t\t\t\t" + str(sum(wait_list)/len(wait_list)) + "\t" + str(sum(tr_list)/len(tr_list)) + "\t" + str(sum(resp_list)/len(resp_list)))
 
 
