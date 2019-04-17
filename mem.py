@@ -32,7 +32,7 @@ def init():
 	arrival_queue.append(Job(7,99))
 	arrival_queue.append(Job(8,59))
 	# arrival_queue.append(Job(8,0))
-	arrival_queue.append(Job(9,80))
+	arrival_queue.append(Job(9,81))
 	arrival_queue.append(Job(10,72))
 	arrival_queue.append(Job(11,19))
 	arrival_queue.append(Job(12,50))
@@ -166,13 +166,12 @@ def first_fit(holes,jobs):
 def best_fit(holes,jobs):
 	for i in range(len(jobs)):
 		holes = sorted(holes, key = compare_wrapper(remaining_space_compare))
-
 		fit_flag = False
 		for h in holes:
 			if (h.rem_space >= jobs[i].size):
 				temp = jobs[i]
 				#print(str(logical_addresses[temp.id]) + " @" + str(logical_addresses[temp.id][1] + h.base + h.size - h.rem_space))
-				print(str(temp.id) + " & " + str(h.base + h.size - h.rem_space) + " & " + str(temp.size) + "\\\\")
+				# print(str(temp.id) + " & " + str(h.base + h.size - h.rem_space) + " & " + str(temp.size) + "\\\\")
 				h.rem_space -= jobs[i].size
 				h.jobs.append(jobs[i])
 				fit_flag = True
@@ -250,12 +249,10 @@ if __name__ == '__main__':
 		rem = sum(h.rem_space for h in holes)
 		if (min == None) or (rem < min):
 			min = rem
-			if (rem == 2):
+			if (rem == 4):
 				break
 	print("Trial #" + str(i))
 	print_result()
 	print("Minimum remaining space: " + str(min))
 
 
-	# Optimal:
-	# 57 excess cannot be satisfied, is it possible to leave out just the size 59 job?
