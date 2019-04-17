@@ -2,6 +2,8 @@
 
 from hole import *
 from asyncio import Queue
+from random import shuffle
+
 
 rejected = []
 total = 0
@@ -29,11 +31,15 @@ def init():
 	arrival_queue.append(Job(6,21))
 	arrival_queue.append(Job(7,99))
 	arrival_queue.append(Job(8,59))
-	arrival_queue.append(Job(9,81))
+	# arrival_queue.append(Job(8,0))
+	arrival_queue.append(Job(9,80))
 	arrival_queue.append(Job(10,72))
 	arrival_queue.append(Job(11,19))
 	arrival_queue.append(Job(12,50))
 	
+	shuffle(arrival_queue)
+
+	print("Total space needed: " + str(sum(job.size for job in arrival_queue)))
 	"""
 	# For testing:
 	holes.append(Hole(1,200))
@@ -197,6 +203,7 @@ def print_hole_info():
 
 if __name__ == '__main__':
 	# For question 3
+	"""
 	print("First:")
 	segment_init()
 	first_fit(holes,jobs)
@@ -217,8 +224,10 @@ if __name__ == '__main__':
 	print("====================================================")
 	"""
 	# For question 2:
+	"""
 	holes, jobs = init()
 	print_jobs()
+	print("====================================================")
 	print("First:")
 	first_fit(holes,jobs)
 	print_result()
@@ -233,5 +242,20 @@ if __name__ == '__main__':
 	worst_fit(holes,jobs)
 	print_result()
 	"""
+	min = None
+	# Exhaust random probabilities
+	for i in range(10000):
+		holes, jobs = init()
+		best_fit(holes,jobs)
+		rem = sum(h.rem_space for h in holes)
+		if (min == None) or (rem < min):
+			min = rem
+			if (rem == 2):
+				break
+	print("Trial #" + str(i))
+	print_result()
+	print("Minimum remaining space: " + str(min))
+
+
 	# Optimal:
 	# 57 excess cannot be satisfied, is it possible to leave out just the size 59 job?
